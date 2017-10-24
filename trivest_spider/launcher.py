@@ -6,7 +6,7 @@ from scrapy import cmdline
 # logger.setLevel(logging.DEBUG)
 # logger.addHandler(logging.StreamHandler())
 
-spiderName = 'bai_ke_ci_tiao_detail'
+spiderName = 'bai_ke_ci_tiao'
 
 cmdline.execute(("scrapy crawl " + spiderName + " -s HTTPCACHE_ENABLED=0  ").split())
 

@@ -50,11 +50,14 @@ class BaiKeCiTiaoSpider(BaseSpider):
         list = response.xpath('//div[@class="content"]//dd/a')
         for item in list:
             name = item.xpath('./text()').extract_first('')
+            url = item.xpath('./@href').extract_first('')
+            if not url.startswith('http://'):
+                url = ''
             if name and name not in self.existCiTiao:
                 self.existCiTiao.append(name)
                 content = {
                     'name': name,
-                    'url': '',
+                    'url': url,
                     'type_name': typeName,
                     'catch_status': ''
                 }
