@@ -67,6 +67,7 @@ class BaiKeCiTiao(BaseModel):
 
 class BaiKeCiTiaoDetail(BaseModel):
     name = CharField(null=True)
+    detail_name = CharField(null=True)
     open_type = CharField(null=True)
     type_name = CharField(null=True)
     summary = TextField(null=True)

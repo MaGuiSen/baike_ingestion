@@ -44,8 +44,10 @@ class BaiKeCiTiaoDetailSpider(BaseSpider):
                 break
             for item in catchList:
                 ciTiaoName = item.name
+                url = item.url
                 self.ciTiaoStatusDao.updateStatus(ciTiaoName, self.ciTiaoStatusDao.Status_start_request)
-                url = 'http://www.baike.com/wiki/%s' % ciTiaoName
+                if not url:
+                    url = 'http://www.baike.com/wiki/%s' % ciTiaoName
                 self.logInfo(u"开始抓取：" + url)
                 yield scrapy.Request(url=url,
                                      meta={
@@ -70,6 +72,9 @@ class BaiKeCiTiaoDetailSpider(BaseSpider):
             summary = response.xpath('//*[@id="anchor"]//text()').extract()
             summary = ''.join(summary).strip().replace(u'编辑摘要', '')
 
+            detailName = response.xpath('//div[@class="content-h1"]//text()').extract()
+            detailName = ''.join(detailName)
+
             baseInfoObj = {}
             baseInfoTable = response.xpath('//*[@id="datamodule"]//td')
             for baseInfo in baseInfoTable:
@@ -87,7 +92,8 @@ class BaiKeCiTiaoDetailSpider(BaseSpider):
                     'name': ciTiaoName,
                     'open_type': openType,
                     'summary': summary,
-                    'base_info': baseInfo
+                    'base_info': baseInfo,
+                    'detail_name': detailName
                 }
             else:
                 self.ciTiaoStatusDao.updateStatus(ciTiaoName, self.ciTiaoStatusDao.Status_no_complete_data)
