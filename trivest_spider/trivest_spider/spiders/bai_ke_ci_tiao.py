@@ -59,7 +59,7 @@ class BaiKeCiTiaoSpider(BaseSpider):
                     'name': name,
                     'url': url,
                     'type_name': typeName,
-                    'catch_status': ''
+                    'status': ''
                 }
                 yield content
         pass
