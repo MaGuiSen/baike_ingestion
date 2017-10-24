@@ -80,7 +80,6 @@ class BaiKeCiTiaoPipeline(BasePipeline):
 
     def process_item(self, item, spider):
         # 如果存储方式和process_item_default方法的相同，则直接调用父类的process_item_default
-        statusDao = CiTiaoStatusDao()
         try:
             self.logInfo(u'存%s：%s' % (self.logName, item['name']), saveInDB=False)
             # 查重
@@ -91,11 +90,9 @@ class BaiKeCiTiaoPipeline(BasePipeline):
                 self.logInfo(u'存%s：%s 成功' % (self.logName, item['name']))
             else:
                 self.logInfo(u'%s：%s 已经存在' % (self.logName, item['name']))
-            statusDao.updateStatus(item.get('name'), statusDao.Status_save_success)
         except Exception as e:
             self.logWarn(str(e))
             self.logWarn(u'存%s：%s失败' % (self.logName, item['name']))
-            statusDao.updateStatus(item.get('name'), statusDao.Status_save_fail)
 
         return item
 
@@ -111,6 +108,7 @@ class BaiKeCiTiaoDetailPipeline(BasePipeline):
         pass
 
     def process_item(self, item, spider):
+        statusDao = CiTiaoStatusDao()
         # 如果存储方式和process_item_default方法的相同，则直接调用父类的process_item_default
         try:
             self.logInfo(u'存%s：%s' % (self.logName, item['name']), saveInDB=False)
@@ -122,9 +120,11 @@ class BaiKeCiTiaoDetailPipeline(BasePipeline):
                 self.logInfo(u'存%s：%s 成功' % (self.logName, item['name']))
             else:
                 self.logInfo(u'%s：%s 已经存在' % (self.logName, item['name']))
+            statusDao.updateStatus(item.get('name'), statusDao.Status_save_success)
         except Exception as e:
             self.logWarn(str(e))
             self.logWarn(u'存%s：%s失败' % (self.logName, item['name']))
+            statusDao.updateStatus(item.get('name'), statusDao.Status_save_fail)
 
         return item
 
