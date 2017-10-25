@@ -4,8 +4,7 @@ import json
 import scrapy
 
 from base_spider import BaseSpider
-from trivest_data.dal.trivest_spider import getTableByName
-from trivest_data.dal.StatusDao import CiTiaoStatusDao
+from trivest_data.dal.CiTiaoStatusDao import CiTiaoStatusDao
 
 
 class BaiKeCiTiaoDetailSpider(BaseSpider):

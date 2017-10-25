@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 
 from trivest_data.dal import LogDao
 from trivest_data.dal.trivest_spider import getTableByName
@@ -29,6 +30,7 @@ class CiTiaoStatusDao(object):
             if len(results):
                 for result in results:
                     result.status = status
+                    result.update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     result.save()
         except Exception as e:
             print str(e)

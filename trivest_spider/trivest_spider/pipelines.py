@@ -10,7 +10,7 @@ import datetime
 
 from trivest_data.dal import LogDao
 from trivest_data.dal.trivest_spider import getTableByName
-from trivest_data.dal.StatusDao import CiTiaoStatusDao
+from trivest_data.dal.CiTiaoStatusDao import CiTiaoStatusDao
 
 class BasePipeline(object):
     def __init__(self):
