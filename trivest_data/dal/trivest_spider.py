@@ -31,7 +31,8 @@ def getTableByName(tableName):
     Tables = {
         'baike_type': BaiKeType,
         'baike_citiao': BaiKeCiTiao,
-        'baike_citiao_detail': BaiKeCiTiaoDetail
+        'baike_citiao_detail': BaiKeCiTiaoDetail,
+        'baike_citiao_ask_reply': BaiKeCiTiaoAskReply
     }
     return Tables[tableName]
 
@@ -69,13 +70,22 @@ class BaiKeCiTiaoDetail(BaseModel):
     name = CharField(null=True)
     detail_name = CharField(null=True)
     open_type = CharField(null=True)
-    type_name = CharField(null=True)
     summary = TextField(null=True)
     base_info = TextField(null=True)
     update_time = DateTimeField(null=True)
 
     class Meta:
         db_table = 'baike_citiao_detail'
+
+
+class BaiKeCiTiaoAskReply(BaseModel):
+    citiao_name = CharField(null=True)
+    ask = CharField(null=True)
+    reply = TextField(null=True)
+
+    class Meta:
+        db_table = 'baike_citiao_ask_reply'
+
 
 if __name__ == '__main__':
     pass
