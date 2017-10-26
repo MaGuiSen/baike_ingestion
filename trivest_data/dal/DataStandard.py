@@ -28,7 +28,7 @@ def operate(pageIndex):
     if not dataList:
         return True
     for item in dataList:
-        detailName = item.detail_name
+        detailName = item.detail_name.replace(' ', '').strip()
         summary = item.summary
         baseInfo = item.base_info
         baseInfoObj = json.loads(baseInfo)
@@ -59,7 +59,7 @@ def operate(pageIndex):
 
         words = [
             {'key': u'毕业院校：','valueContent': u'TA毕业于{**}'},
-            {'key': u'去世日期：', 'valueContent': u'TA没活过{**}这天'},
+            {'key': u'去世日期：', 'valueContent': u'TA没活过{**}这天!!!'},
             {'key': u'职业：', 'valueContent': u'TA的职业是{**}'},
             {'key': u'代表作品：', 'valueContent': u'TA的代表作品有{**}'},
             {'key': u'出生地：', 'valueContent': u'TA出生于{**}'},
@@ -84,7 +84,7 @@ def operate(pageIndex):
         for word in words:
             key = word['key']
             valueContent = word['valueContent']
-            value = baseInfoObj.get('key')
+            value = baseInfoObj.get(key)
             if value:
                 valueNew = valueContent.replace('{**}', value)
                 replys.append(valueNew)
@@ -100,12 +100,24 @@ def operate(pageIndex):
             else:
                 replys.append(summary)
                 pass
-
+        print '========', detailName,  '========== start'
         for reply in replys:
             print u'问: ', detailName
             print u'回答: ', reply
             print ''
+            saveFile(detailName, reply)
+        print '========', detailName, '========== end'
+        print ''
 
+
+def saveFile(ask, reply):
+    ask = ask.encode('utf8')
+    reply = reply.encode('utf8')
+    with open('baike_ask_reply.txt', 'a') as loadF:
+        loadF.write('问：' + ask + '\n')
+        loadF.write('回答：' + reply + '\n')
+        loadF.write('\n')
+        loadF.close()
 
 if __name__ == '__main__':
     circleRun(operate)
