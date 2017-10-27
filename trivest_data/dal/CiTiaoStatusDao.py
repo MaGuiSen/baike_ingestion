@@ -45,7 +45,10 @@ class CiTiaoStatusDao(object):
                            self.Status_no_parse_method,
                            self.Status_be_forbid
                            ]
-            results = self.Table.select().where(~(self.Table.status << existStatus))\
+            # results = self.Table.select().where(self.Table.type_name == u'哲学术语', ~(self.Table.status << existStatus))\
+            #     .paginate(pageIndex, 15)
+            results = self.Table.select().where(~(self.Table.status << existStatus)) \
+                .order_by(self.Table.id.desc()) \
                 .paginate(pageIndex, 15)
             return results
         except Exception as e:

@@ -24,23 +24,6 @@ class BasePipeline(object):
         belong_to = belong_to or self.belong_to
         LogDao.warn(msg, belong_to=belong_to, saveInDB=saveInDB)
 
-    def process_item_default(self, item, table, logName):
-        try:
-            self.logInfo(u'存%s详情：%s' % (logName, item['title']), saveInDB=False)
-            # 查重
-            results = table.select().where(table.haoyaoshi_id == item.get('haoyaoshi_id')).count()
-            if not results:
-                item['update_time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                table.create(**item)
-                self.logInfo(u'存%s详情：%s 成功 haoyaoshi_id：%s' % (logName, item['title'], item['haoyaoshi_id']))
-            else:
-                self.logInfo(u'%s详情：%s 已经存在 haoyaoshi_id：%s' % (logName, item['title'], item['haoyaoshi_id']))
-        except Exception as e:
-            self.logWarn(str(e))
-            self.logWarn(u'存%s详情：%s失败' % (logName, item['title']))
-
-        return item
-
 
 class BaiKeTypePipeline(BasePipeline):
     def __init__(self):
