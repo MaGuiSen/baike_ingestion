@@ -10,8 +10,9 @@ from trivest_data.dal.CiTiaoStatusDao import CiTiaoStatusDao
 class BaiKeCiTiaoDetailSpider(BaseSpider):
     handle_httpstatus_list = [204, 206, 301, 400, 403, 404, 500] # 错误码中302是处理重定向的，可以不写，因为写了可能导致404无法回掉，写在外部
     name = 'bai_ke_ci_tiao_detail'
+    download_delay = 0.5
     custom_settings = {
-        'download_delay': 2.5,
+        # 'download_delay': 2.5,
         'ITEM_PIPELINES': {
             'trivest_spider.pipelines.BaiKeCiTiaoDetailPipeline': 50,
         },

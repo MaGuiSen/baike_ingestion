@@ -47,7 +47,12 @@ class BaiKeCiTiaoSpider(BaseSpider):
 
     def parseDetail(self, response):
         typeName = response.meta['typeName']
-        list = response.xpath('//div[@class="content"]//dd/a')
+        list = response.xpath('//div[@class="content"]//dd/a') or response.xpath('//dd/a')
+        if not list:
+            self.logInfo(u"没有值是不是界面错了-----------------------------------------：" + typeName + u'： ' + response.url)
+        else:
+            self.logInfo(u'开始解析+++++++++++++++++++++' + typeName + u'：长度为： ' + str(len(list)) + ' ' + response.url)
+
         for item in list:
             name = item.xpath('./text()').extract_first('')
             url = item.xpath('./@href').extract_first('')
