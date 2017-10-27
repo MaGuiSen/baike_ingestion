@@ -10,7 +10,7 @@ from trivest_spider import getTableByName
 
 def getDetailList(pageIndex):
     table = getTableByName('baike_citiao_detail')
-    return table.select().paginate(pageIndex, 100)
+    return table.select().paginate(pageIndex, 1000)
 
 
 def circleRun(operate):
@@ -25,7 +25,9 @@ def circleRun(operate):
 
 def operate(pageIndex):
     dataList = getDetailList(pageIndex)
-    if not dataList:
+    # if not dataList:
+    #     return True
+    if pageIndex > 120:
         return True
     for item in dataList:
         detailName = item.detail_name.replace(' ', '').strip()
@@ -59,7 +61,6 @@ def operate(pageIndex):
 
         words = [
             {'key': u'含义：', 'valueContent': [u'{**}']},
-            {'key': u'出处：', 'valueContent': [u'{**}']},
             {'key': u'完整说法：', 'valueContent': [u'{**}']},
             {'key': u'帖子标题：', 'valueContent': [u'{**}']},
             {'key': u'释义：', 'valueContent': [u'{**}']},
