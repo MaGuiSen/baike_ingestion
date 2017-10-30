@@ -15,7 +15,7 @@ def getDetailList(pageIndex):
 
 
 def circleRun(operate):
-    pageIndex = 1
+    pageIndex = 13
     while True:
         if operate(pageIndex):
             print 'end', pageIndex
@@ -28,7 +28,7 @@ def operate(pageIndex):
     dataList = getDetailList(pageIndex)
     # if not dataList:
     #     return True
-    if pageIndex > 12:
+    if pageIndex > 26:
         return True
     for item in dataList:
         name = item.name
@@ -205,7 +205,7 @@ def operate(pageIndex):
 def saveFile(ask, reply):
     ask = ask.encode('utf8')
     reply = reply.encode('utf8')
-    with open('baike_ask_reply.txt', 'a') as loadF:
+    with open('baike_ask_reply2.txt', 'a') as loadF:
         loadF.write('E' + '\n')
         loadF.write('M ' + ask + '\n')
         loadF.write('M ' + reply + '\n')
