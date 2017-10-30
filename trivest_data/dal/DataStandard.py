@@ -2,6 +2,7 @@
 import json
 
 import datetime
+import re
 
 from scrapy import Selector
 
@@ -25,11 +26,12 @@ def circleRun(operate):
 
 def operate(pageIndex):
     dataList = getDetailList(pageIndex)
-    # if not dataList:
-    #     return True
-    if pageIndex > 120:
+    if not dataList:
         return True
+    # if pageIndex > 120:
+    #     return True
     for item in dataList:
+        name = item.name
         detailName = item.detail_name.replace(' ', '').strip()
         summary = item.summary
         open_type = item.open_type
@@ -98,13 +100,77 @@ def operate(pageIndex):
             u'政党',
             u'政府组织',
             u'政治',
-            u'政治组织'
+            u'政治组织',
+            u'书籍',  # 书籍去掉
         ]
 
+        # 去掉不要的类型
+        # 科学家
+        # 科技产品
+        # 政治人物
+        # 社会
+        # 体育设施
+        # 饮食
+        # 健康
+        # 时尚
+        # 社会科学人物
+        # 自然科学人物
+
+        removeCiTiaoTypes = [
+            u'科学家',
+            u'科技产品',
+            u'政治人物',
+            u'自然科学人物',
+            u'社会科学人物',
+            u'饮食',
+            u'健康',
+            u'时尚',
+            u'社会',
+            u'体育设施',
+        ]
+        ciTiaoTable = getTableByName('baike_citiao')
+        ciTiaoResults = ciTiaoTable.select().where(ciTiaoTable.name == name)
+        isNeedRemoveCiTiao = False
+        if ciTiaoResults:
+            type_name = ciTiaoResults[0].type_name
+            if type_name in removeCiTiaoTypes:
+                print u'移除不要的分类', type_name, detailName, open_type
+                isNeedRemoveCiTiao = True
+            else:
+                typeTable = getTableByName('baike_type')
+                typeResults = typeTable.select().where(typeTable.name == type_name)
+                if typeResults:
+                    parents = typeResults[0].parent.split('-')
+                    for parent in parents:
+                        if parent in removeCiTiaoTypes:
+                            isNeedRemoveCiTiao = True
+                            print u'移除不要的分类', type_name, parent, detailName, open_type
+                            break
+        if isNeedRemoveCiTiao:
+            continue
+
+
+        # 包含数字，或者字母的去掉
+        def isNotChinese(checkValue):
+            return any(char.isdigit() or char.isalpha() for char in checkValue)
+
+        if isNotChinese(detailName.encode('utf8')):
+            print u'移除', u'带有字母数字', detailName, open_type
+            continue
+
+        # 书籍去掉 《》
+        if detailName.startswith(u'《') or detailName.endswith(u'》'):
+            print u'移除', u'书籍', detailName, open_type
+            continue
+
+        needRemove = False
         for typeRemove in typeRemoves:
             if typeRemove in open_type:
                 print u'移除', typeRemove, detailName, open_type
-                continue
+                needRemove = True
+                break
+        if needRemove:
+            continue
 
         for word in words:
             key = word['key']
@@ -148,3 +214,8 @@ def saveFile(ask, reply):
 
 if __name__ == '__main__':
     circleRun(operate)
+    # def isChinese(checkValue):
+    #     return not any(char.isdigit() or char.isalpha() for char in checkValue)
+    #
+    #
+    # print isChinese(u'你好'.encode('utf8'))
