@@ -47,8 +47,8 @@ class CiTiaoStatusDao(object):
                            ]
             # results = self.Table.select().where(self.Table.type_name == u'哲学术语', ~(self.Table.status << existStatus))\
             #     .paginate(pageIndex, 15)
+            # .order_by(self.Table.id.asc()) \
             results = self.Table.select().where(~(self.Table.status << existStatus)) \
-                .order_by(self.Table.id.desc()) \
                 .paginate(pageIndex, 15)
             return results
         except Exception as e:
