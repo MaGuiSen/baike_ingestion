@@ -26,14 +26,12 @@ database = MyRetryDB(__mysql_config['database'],
 database.execute_sql("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;")
 
 
-
 # TODO...新增一个表的对象，就在此处添加一个键值对，指定数据库名称和类的对应关系
 def getTableByName(tableName):
     Tables = {
         'baike_type': BaiKeType,
         'baike_citiao': BaiKeCiTiao,
         'baike_citiao_detail': BaiKeCiTiaoDetail,
-        'baike_citiao_ask_reply': BaiKeCiTiaoAskReply
     }
     return Tables[tableName]
 
@@ -77,15 +75,6 @@ class BaiKeCiTiaoDetail(BaseModel):
 
     class Meta:
         db_table = 'baike_citiao_detail'
-
-
-class BaiKeCiTiaoAskReply(BaseModel):
-    citiao_name = CharField(null=True)
-    ask = CharField(null=True)
-    reply = TextField(null=True)
-
-    class Meta:
-        db_table = 'baike_citiao_ask_reply'
 
 
 if __name__ == '__main__':
